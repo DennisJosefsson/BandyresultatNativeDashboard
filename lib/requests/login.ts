@@ -6,6 +6,7 @@ import { baseUrl, header } from './config'
 const loginApi = axios.create({
   baseURL: `${baseUrl}/api/login`,
   headers: header,
+  withCredentials: true,
 })
 
 export const logout = async (): Promise<z.infer<typeof login>> => {
