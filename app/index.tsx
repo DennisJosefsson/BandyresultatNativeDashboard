@@ -1,15 +1,27 @@
 import { Link } from 'expo-router'
-import { Text, View } from 'react-native'
+import { View, FlatList } from 'react-native'
 import './index.css'
+import { Text } from '@/components/ui/text'
+import { Button } from '@/components/ui/button'
 
 export default function App() {
   return (
-    <View className="bg-slate-900 h-screen flex flex-col p-4">
-      <Text className="font-bold text-slate-100 text-4xl">Hello, world!</Text>
-      <Link href="/login">
-        <Text className="font-bold text-blue-500 underline text-2xl">
-          Inloggning
-        </Text>
+    <View className="flex flex-row justify-between p-10">
+      <Link
+        href="/seasons"
+        asChild
+      >
+        <Button size="sm">
+          <Text>Säsonger</Text>
+        </Button>
+      </Link>
+      <Link
+        href="/login"
+        asChild
+      >
+        <Button size="sm">
+          <Text>Inloggning</Text>
+        </Button>
       </Link>
     </View>
   )
