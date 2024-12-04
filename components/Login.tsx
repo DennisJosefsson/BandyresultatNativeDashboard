@@ -9,6 +9,7 @@ import { z } from 'zod'
 import { Input } from './ui/input'
 import { Text } from './ui/text'
 import { Button } from './ui/button'
+import { saveToken } from '@/lib/utils/tokens'
 
 const Login = () => {
   const [userName, setUserName] = useState('')
@@ -22,8 +23,11 @@ const Login = () => {
     onSuccess: (data) => onSuccessMutation(data),
   })
 
-  const onSuccessMutation = (data: z.infer<typeof login>) => {
+  const onSuccessMutation = async (
+    data: z.infer<typeof login>
+  ) => {
     if (data.success && user === false) {
+      await saveToken(data.token)
       dispatch({ type: 'LOGIN' })
       setError(data.message)
       setUserName('')
@@ -55,7 +59,8 @@ const Login = () => {
         <View className="flex flex-row items-center justify-between">
           <View>
             <Text className="text-base text-wrap text-slate-100">
-              Användare är {user ? 'inloggad.' : 'ej inloggad.'}
+              Användare är{' '}
+              {user ? 'inloggad.' : 'ej inloggad.'}
             </Text>
           </View>
           {user && (
@@ -84,7 +89,9 @@ const Login = () => {
       </View>
       <View className="flex flex-col gap-2">
         <View style={{ marginTop: 10 }}>
-          <Text className="text-base text-wrap text-slate-100">Lösenord</Text>
+          <Text className="text-base text-wrap text-slate-100">
+            Lösenord
+          </Text>
         </View>
         <View style={{ marginTop: 10 }}>
           <Input

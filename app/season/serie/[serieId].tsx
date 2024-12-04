@@ -8,14 +8,14 @@ import {
 } from '@/components/ui/tabs'
 import { Text } from '@/components/ui/text'
 import { getSeriesGames } from '@/lib/requests/dashboard'
-import { game } from '@/lib/types/dashboard'
+import { singleGame } from '@/lib/types/dashboard'
 import { useQuery } from '@tanstack/react-query'
-import { useLocalSearchParams } from 'expo-router'
+import { Link, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import { z } from 'zod'
 
-type GameProps = z.infer<typeof game>
+type GameProps = z.infer<typeof singleGame>
 
 const Game = ({ game }: { game: GameProps }) => {
   return (
@@ -36,9 +36,17 @@ const Game = ({ game }: { game: GameProps }) => {
         </Text>
       </View>
       <View className="flex flex-row items-center justify-end">
-        <Button size="xs">
-          <Text>Ändra</Text>
-        </Button>
+        <Link
+          asChild
+          href={{
+            pathname: '/season/serie/game/[gameId]',
+            params: { gameId: game.gameId.toString() },
+          }}
+        >
+          <Button size="xs">
+            <Text>Ändra</Text>
+          </Button>
+        </Link>
       </View>
     </View>
   )

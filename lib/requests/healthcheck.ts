@@ -2,7 +2,7 @@ import axios from 'axios'
 import { baseUrl, header } from './config'
 
 const healthcheckApi = axios.create({
-  baseURL: `${baseUrl}/healthcheck`,
+  baseURL: `https://bandyresultat.se/healthcheck`,
   headers: header,
 })
 

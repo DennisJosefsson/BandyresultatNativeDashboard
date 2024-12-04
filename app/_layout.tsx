@@ -1,9 +1,15 @@
 import UserContextProvider from '@/lib/contexts/userContext'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import './index.css'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Theme, ThemeProvider } from '@react-navigation/native'
+import {
+  Theme,
+  ThemeProvider,
+} from '@react-navigation/native'
 import { SplashScreen, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import * as React from 'react'
@@ -82,15 +88,19 @@ export {
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme()
-  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false)
+  const { colorScheme, setColorScheme, isDarkColorScheme } =
+    useColorScheme()
+  const [isColorSchemeLoaded, setIsColorSchemeLoaded] =
+    React.useState(false)
 
   React.useEffect(() => {
     ;(async () => {
       const theme = await AsyncStorage.getItem('theme')
       if (Platform.OS === 'web') {
         // Adds the background color to the html element to prevent white background on overscroll.
-        document.documentElement.classList.add('bg-background')
+        document.documentElement.classList.add(
+          'bg-background'
+        )
       }
       if (!theme) {
         AsyncStorage.setItem('theme', colorScheme)
@@ -111,7 +121,8 @@ export default function RootLayout() {
   }, [])
 
   const themeToggle = () => {
-    const nextTheme = colorScheme === 'dark' ? 'light' : 'dark'
+    const nextTheme =
+      colorScheme === 'dark' ? 'light' : 'dark'
     setColorScheme(nextTheme)
     AsyncStorage.setItem('theme', nextTheme)
   }
@@ -122,8 +133,14 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
-        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-          <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+        <ThemeProvider
+          value={
+            isDarkColorScheme ? DARK_THEME : LIGHT_THEME
+          }
+        >
+          <StatusBar
+            style={isDarkColorScheme ? 'light' : 'dark'}
+          />
           <Stack>
             <Stack.Screen
               name="index"
@@ -144,6 +161,10 @@ export default function RootLayout() {
             <Stack.Screen
               name="season/serie/[serieId]"
               options={{ title: 'Serie' }}
+            />
+            <Stack.Screen
+              name="season/serie/game/[gameId]"
+              options={{ title: 'Match' }}
             />
           </Stack>
           <View className="flex flex-row justify-end p-1 bg-background">

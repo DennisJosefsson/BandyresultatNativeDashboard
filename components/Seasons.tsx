@@ -1,7 +1,7 @@
 import { getSeasons } from '@/lib/requests/dashboard'
 import { season } from '@/lib/types/dashboard'
 import { useQuery } from '@tanstack/react-query'
-import { View, FlatList } from 'react-native'
+import { View, FlatList, ScrollView } from 'react-native'
 import { z } from 'zod'
 import { Card } from '@/components/ui/card'
 import { Text } from '@/components/ui/text'
@@ -13,7 +13,10 @@ type SeasonProps = z.infer<typeof season>
 const Season = ({ women, seasonId }: SeasonProps) => (
   <Link
     asChild
-    href={{ pathname: '/season/[seasonId]', params: { seasonId } }}
+    href={{
+      pathname: '/season/[seasonId]',
+      params: { seasonId },
+    }}
   >
     <Button size="sm">
       <Text>{women ? 'Damer' : 'Herrar'}</Text>
@@ -34,7 +37,9 @@ const Seasons = () => {
   if (error) {
     return (
       <Card>
-        <Text className="text-lg font-semibold">{error.message}</Text>
+        <Text className="text-lg font-semibold">
+          {error.message}
+        </Text>
       </Card>
     )
   }
@@ -42,7 +47,9 @@ const Seasons = () => {
   if (isPending) {
     return (
       <Card>
-        <Text className="text-lg font-semibold">Laddar...</Text>
+        <Text className="text-lg font-semibold">
+          Laddar...
+        </Text>
       </Card>
     )
   }

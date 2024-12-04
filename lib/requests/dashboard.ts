@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { baseUrl, header } from './config'
 import { z } from 'zod'
-import { games, seasons, series } from '../types/dashboard'
+import { games, seasons, series, singleGame } from '../types/dashboard'
 
 const dashboardApi = axios.create({
   baseURL: `${baseUrl}/api/dashboard`,
@@ -27,5 +27,10 @@ export const getSeries = async ({seasonId}:{seasonId:string}):Promise<z.infer<ty
 
 export const getSeriesGames = async ({serieId}:{serieId:string}):Promise<z.infer<typeof games>> => {
   const response = await dashboardApi.get(`/native/serie/${serieId}`)
+  return response.data
+}
+
+export const getSingleGame = async ({gameId}:{gameId:string}):Promise<z.infer<typeof singleGame>> => {
+  const response = await dashboardApi.get(`/native/game/${gameId}`)
   return response.data
 }
