@@ -3,12 +3,11 @@ import { getLogin } from '@/lib/requests/login'
 import { login } from '@/lib/types/login'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { useState } from 'react'
-import { View } from 'react-native'
+import { ChangeEvent, useState } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import { z } from 'zod'
-import { Input } from './ui/input'
-import { Text } from './ui/text'
-import { Button } from './ui/button'
+
+import { Button } from './ui/Button'
 import { saveToken } from '@/lib/utils/tokens'
 
 const Login = () => {
@@ -53,12 +52,24 @@ const Login = () => {
     mutation.mutate()
   }
 
+  const onUsernameChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setUserName(event.target.value)
+  }
+
+  const onPasswordChange = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setPassword(event.target.value)
+  }
+
   return (
-    <View className="flex flex-col w-full h-screen gap-4 p-4 mt-4">
-      <View className="flex flex-col gap-8">
-        <View className="flex flex-row items-center justify-between">
+    <View style={styles.container}>
+      <View>
+        <View style={styles.userInfo}>
           <View>
-            <Text className="text-base text-wrap text-slate-100">
+            <Text style={styles.text}>
               Användare är{' '}
               {user ? 'inloggad.' : 'ej inloggad.'}
             </Text>
@@ -67,7 +78,6 @@ const Login = () => {
             <View>
               <Button
                 onPress={() => dispatch({ type: 'LOGOUT' })}
-                size="sm"
               >
                 <Text>Logga ut</Text>
               </Button>
@@ -75,46 +85,65 @@ const Login = () => {
           )}
         </View>
         <View style={{ marginTop: 10 }}>
-          <Text className="text-base text-wrap text-slate-100">
-            Användarnamn
-          </Text>
+          <Text style={styles.text}>Användarnamn</Text>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Input
+          <input
             value={userName}
-            onChangeText={setUserName}
+            onChange={(event) => onUsernameChange(event)}
             autoComplete="username"
+            style={styles.input}
           />
         </View>
       </View>
-      <View className="flex flex-col gap-2">
+      <View>
         <View style={{ marginTop: 10 }}>
-          <Text className="text-base text-wrap text-slate-100">
-            Lösenord
-          </Text>
+          <Text style={styles.text}>Lösenord</Text>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Input
+          <input
             value={password}
-            onChangeText={setPassword}
+            onChange={(event) => onPasswordChange(event)}
             autoComplete="password"
-            secureTextEntry={true}
+            type="password"
+            style={styles.input}
           />
         </View>
       </View>
       <View style={{ marginTop: 10 }}>
-        <Button
-          onPress={handleSubmit}
-          size="sm"
-        >
+        <Button onPress={handleSubmit}>
           <Text>Skicka</Text>
         </Button>
       </View>
       <View style={{ marginTop: 10 }}>
-        <Text className="text-slate-100">{error}</Text>
+        <Text style={styles.text}>{error}</Text>
       </View>
     </View>
   )
 }
 
 export default Login
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    gap: 8,
+    backgroundColor: 'black',
+    color: 'white',
+    padding: 40,
+  },
+  text: {
+    color: 'white',
+  },
+  input: {
+    height: 24,
+    paddingHorizontal: 2,
+    paddingVertical: 1,
+  },
+  userInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+})

@@ -1,4 +1,3 @@
-import { Card } from '@/components/ui/card'
 import { getSingleGame } from '@/lib/requests/dashboard'
 import {
   useMutation,
@@ -6,15 +5,14 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { useLocalSearchParams, router } from 'expo-router'
-import { Text } from '@/components/ui/text'
-import { View } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import {
   Dispatch,
   SetStateAction,
   useEffect,
   useState,
 } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { editGame } from '@/lib/requests/games'
 import { singleGame } from '@/lib/types/dashboard'
 import { z } from 'zod'
@@ -86,18 +84,20 @@ const Game = () => {
 
   if (error) {
     return (
-      <Card>
-        <Text className="text-lg font-semibold">
+      <View style={styles.container}>
+        <Text style={{ color: 'white', fontWeight: '800' }}>
           {error.message}
         </Text>
-      </Card>
+      </View>
     )
   }
 
   if (!user) {
     return (
-      <View className="flex flex-row justify-center mt-10">
-        <Text className="font-bold">
+      <View style={styles.container}>
+        <Text
+          style={{ color: 'white', fontWeight: 'bold' }}
+        >
           Måste logga in först!
         </Text>
       </View>
@@ -106,11 +106,11 @@ const Game = () => {
 
   if (isPending) {
     return (
-      <Card>
-        <Text className="text-lg font-semibold">
+      <View style={styles.container}>
+        <Text style={{ color: 'white', fontWeight: '800' }}>
           Laddar...
         </Text>
-      </Card>
+      </View>
     )
   }
 
@@ -138,31 +138,66 @@ const Game = () => {
 
   if (game) {
     return (
-      <View className="flex flex-col gap-2 p-4 mt-2">
-        <View className="flex flex-row justify-center">
-          <Text className="font-bold">{game.date}</Text>
+      <View style={styles.container}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            maxHeight: 20,
+          }}
+        >
+          <Text
+            style={{ color: 'white', fontWeight: 'bold' }}
+          >
+            {game.date}
+          </Text>
         </View>
-        <View className="flex flex-row justify-between">
-          <Text className="font-bold">
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            maxHeight: 20,
+            marginBottom: 20,
+          }}
+        >
+          <Text
+            style={{ color: 'white', fontWeight: 'bold' }}
+          >
             {game.homeTeam.casualName}
           </Text>
-          <Text className="font-bold">
+          <Text
+            style={{ color: 'white', fontWeight: 'bold' }}
+          >
             {game.awayTeam.casualName}
           </Text>
         </View>
-        <View className="flex flex-row justify-between mb-4">
+        <View style={styles.mainContent}>
           <GoalComponent
             goal={homeGoal}
             setGoal={setHomeGoal}
           />
-          <View className="flex flex-col gap-2">
-            <View className="flex flex-row justify-center">
-              <Text className="font-semibold">
-                Resultat
-              </Text>
+          <View style={{ flex: 1, gap: 8 }}>
+            <View
+              style={{
+                flex: 1,
+                gap: 8,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={styles.mainText}>Resultat</Text>
             </View>
-            <View className="flex flex-row justify-center">
-              <Text className="font-semibold">
+            <View
+              style={{
+                flex: 1,
+                gap: 8,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={styles.mainText}>
                 {homeGoal}-{awayGoal}
               </Text>
             </View>
@@ -172,17 +207,31 @@ const Game = () => {
             setGoal={setAwayGoal}
           />
         </View>
-        <View className="flex flex-row justify-between">
+        <View style={styles.mainContent}>
           <GoalComponent
             goal={halftimeHomeGoal}
             setGoal={setHalftimeHomeGoal}
           />
-          <View className="flex flex-col gap-2">
-            <View className="flex flex-row justify-center">
-              <Text className="font-semibold">Halvtid</Text>
+          <View style={{ flex: 1, gap: 8 }}>
+            <View
+              style={{
+                flex: 1,
+                gap: 8,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={styles.mainText}>Halvtid</Text>
             </View>
-            <View className="flex flex-row justify-center">
-              <Text className="font-semibold">
+            <View
+              style={{
+                flex: 1,
+                gap: 8,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <Text style={styles.mainText}>
                 {halftimeHomeGoal}-{halftimeAwayGoal}
               </Text>
             </View>
@@ -192,12 +241,21 @@ const Game = () => {
             setGoal={setHalftimeAwayGoal}
           />
         </View>
-        <Button
-          className="mt-10"
-          onPress={handleSubmit}
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginTop: 10,
+          }}
         >
-          <Text>Skicka</Text>
-        </Button>
+          <Button
+            className="mt-10"
+            onPress={handleSubmit}
+          >
+            <Text>Skicka</Text>
+          </Button>
+        </View>
         <View className="flex flex-row justify-center mt-6">
           <Text>
             {showError.error ? showError.message : null}
@@ -226,18 +284,48 @@ function GoalComponent({
   }
 
   return (
-    <View className="flex flex-col items-center gap-2">
-      <Button onPress={plus}>
-        <Text className="text-primary-foreground">+</Text>
+    <View style={styles.goalComponent}>
+      <Button
+        onPress={plus}
+        style={{ maxHeight: 10, maxWidth: 10 }}
+      >
+        <Text>+</Text>
       </Button>
-      <View className="flex items-center justify-center rounded-sm h-9 w-9 bg-secondary">
-        <Text>{goal}</Text>
+      <View>
+        <Text style={{ color: 'white' }}>{goal}</Text>
       </View>
-      <Button onPress={minus}>
-        <Text className="text-primary-foreground">-</Text>
+      <Button
+        onPress={minus}
+        style={{ maxHeight: 10, maxWidth: 10 }}
+      >
+        <Text>-</Text>
       </Button>
     </View>
   )
 }
 
 export default Game
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 4,
+    backgroundColor: 'black',
+    padding: 10,
+    height: '100%',
+  },
+  mainContent: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    maxHeight: 80,
+  },
+  mainText: { color: 'white', fontWeight: '800' },
+
+  goalComponent: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 8,
+  },
+})

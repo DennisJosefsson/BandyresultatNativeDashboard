@@ -1,11 +1,9 @@
 import { getSeasons } from '@/lib/requests/dashboard'
 import { season } from '@/lib/types/dashboard'
 import { useQuery } from '@tanstack/react-query'
-import { View, FlatList, ScrollView } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { z } from 'zod'
-import { Card } from '@/components/ui/card'
-import { Text } from '@/components/ui/text'
-import { Button } from './ui/button'
+import { Button } from './ui/Button'
 import { Link } from 'expo-router'
 
 type SeasonProps = z.infer<typeof season>
@@ -18,7 +16,7 @@ const Season = ({ women, seasonId }: SeasonProps) => (
       params: { seasonId },
     }}
   >
-    <Button size="sm">
+    <Button>
       <Text>{women ? 'Damer' : 'Herrar'}</Text>
     </Button>
   </Link>
@@ -36,27 +34,23 @@ const Seasons = () => {
 
   if (error) {
     return (
-      <Card>
-        <Text className="text-lg font-semibold">
-          {error.message}
-        </Text>
-      </Card>
+      <View style={styles.container}>
+        <Text style={styles.text}>{error.message}</Text>
+      </View>
     )
   }
 
   if (isPending) {
     return (
-      <Card>
-        <Text className="text-lg font-semibold">
-          Laddar...
-        </Text>
-      </Card>
+      <View style={styles.container}>
+        <Text style={styles.text}>Laddar...</Text>
+      </View>
     )
   }
 
   if (seasons) {
     return (
-      <View className="flex flex-row justify-between p-10">
+      <View style={styles.container}>
         {seasons.map((season) => {
           return (
             <Season
@@ -73,3 +67,18 @@ const Seasons = () => {
 }
 
 export default Seasons
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 40,
+    backgroundColor: 'black',
+    gap: 10,
+    height: '100%',
+  },
+  text: {
+    color: 'white',
+  },
+})

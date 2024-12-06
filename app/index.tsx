@@ -1,19 +1,15 @@
 import { Link } from 'expo-router'
-import { View, FlatList } from 'react-native'
-import './index.css'
-import { Text } from '@/components/ui/text'
-import { Button } from '@/components/ui/button'
-import { useQuery } from '@tanstack/react-query'
-import { getHealthcheck } from '@/lib/requests/healthcheck'
+import { View, Text, StyleSheet } from 'react-native'
+import { Button } from '@/components/ui/Button'
 
 export default function App() {
   return (
-    <View className="flex flex-row justify-between p-10">
+    <View style={styles.container}>
       <Link
         href="/seasons"
         asChild
       >
-        <Button size="sm">
+        <Button>
           <Text>Säsonger</Text>
         </Button>
       </Link>
@@ -21,10 +17,22 @@ export default function App() {
         href="/login"
         asChild
       >
-        <Button size="sm">
+        <Button>
           <Text>Inloggning</Text>
         </Button>
       </Link>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 40,
+    gap: 10,
+    backgroundColor: 'black',
+    height: '100%',
+  },
+})

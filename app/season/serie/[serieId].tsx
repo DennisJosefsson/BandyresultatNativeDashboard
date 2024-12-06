@@ -1,41 +1,47 @@
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs'
-import { Text } from '@/components/ui/text'
+import { Button, SmallButton } from '@/components/ui/Button'
 import { getSeriesGames } from '@/lib/requests/dashboard'
 import { singleGame } from '@/lib/types/dashboard'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useLocalSearchParams } from 'expo-router'
 import { useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+} from 'react-native'
 import { z } from 'zod'
 
-type GameProps = z.infer<typeof singleGame>
+type GameProps = {
+  homeTeam: string
+  awayTeam: string
+  date: string
+  result: string
+  halftimeResult: string
+  gameId: number
+}
 
-const Game = ({ game }: { game: GameProps }) => {
+const Game = (game: GameProps) => {
   return (
-    <View className="flex flex-row items-center justify-start gap-2">
-      <View className="flex flex-row items-center justify-start gap-2">
-        <Text className="w-16 text-[8px]">{game.date}</Text>
-        <Text className="w-16 text-[8px] truncate">
-          {game.homeTeam.casualName}
+    <View style={styles.gameContainer}>
+      <View style={styles.gameItems}>
+        <Text style={{ ...styles.gameText, width: 55 }}>
+          {game.date}
         </Text>
-        <Text className="w-16 text-[8px] truncate">
-          {game.awayTeam.casualName}
+        <Text style={{ ...styles.gameText, width: 55 }}>
+          {game.homeTeam}
         </Text>
-        <Text className="w-10 text-[8px]">
+        <Text style={{ ...styles.gameText, width: 55 }}>
+          {game.awayTeam}
+        </Text>
+        <Text style={{ ...styles.gameText, width: 25 }}>
           {game.result}
         </Text>
-        <Text className="w-10 text-[8px]">
+        <Text style={{ ...styles.gameText, width: 25 }}>
           {game.halftimeResult}
         </Text>
       </View>
-      <View className="flex flex-row items-center justify-end">
+      <View style={styles.gameButton}>
         <Link
           asChild
           href={{
@@ -43,9 +49,9 @@ const Game = ({ game }: { game: GameProps }) => {
             params: { gameId: game.gameId.toString() },
           }}
         >
-          <Button size="xs">
+          <SmallButton style={{ width: 80 }}>
             <Text>Ändra</Text>
-          </Button>
+          </SmallButton>
         </Link>
       </View>
     </View>
@@ -64,25 +70,21 @@ const SingleSerie = () => {
     queryKey: ['games'],
     queryFn: () => getSeriesGames({ serieId }),
   })
-  const [value, setValue] = useState('unplayed')
+  const [value, setValue] = useState('played')
 
   if (error) {
     return (
-      <Card>
-        <Text className="text-lg font-semibold">
-          {error.message}
-        </Text>
-      </Card>
+      <View style={styles.container}>
+        <Text style={styles.text}>{error.message}</Text>
+      </View>
     )
   }
 
   if (isPending) {
     return (
-      <Card>
-        <Text className="text-lg font-semibold">
-          Laddar...
-        </Text>
-      </Card>
+      <View style={styles.container}>
+        <Text style={styles.text}>Laddar...</Text>
+      </View>
     )
   }
 
@@ -95,75 +97,144 @@ const SingleSerie = () => {
     )
 
     return (
-      <View className="p-2">
-        <Tabs
-          value={value}
-          onValueChange={setValue}
-        >
-          <TabsList className="flex-row w-full">
-            <TabsTrigger
-              value="unplayed"
-              className="flex-1"
-            >
-              <Text>Ospelade matcher</Text>
-            </TabsTrigger>
-            <TabsTrigger
-              value="played"
-              className="flex-1"
-            >
-              <Text>Spelade matcher</Text>
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="unplayed">
-            {unplayed.length === 0 ? (
-              <View className="flex flex-row justify-center mt-10">
-                <Text>Inga ospelade matcher</Text>
-              </View>
-            ) : null}
-            {unplayed.length > 0 ? (
-              <View className="flex flex-1">
-                <ScrollView className="max-h-[480px]">
-                  <View className="flex flex-col gap-2 p-2">
-                    {unplayed.map((game) => {
-                      return (
-                        <Game
-                          key={game.gameId}
-                          game={game}
-                        />
-                      )
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-            ) : null}
-          </TabsContent>
-          <TabsContent value="played">
-            {played.length === 0 ? (
-              <View className="flex flex-row justify-center mt-10">
-                <Text>Inga spelade matcher</Text>
-              </View>
-            ) : null}
-            {played.length > 0 ? (
-              <View className="flex flex-1">
-                <ScrollView className="max-h-[480px]">
-                  <View className="flex flex-col gap-2 p-2">
-                    {played.map((game) => {
-                      return (
-                        <Game
-                          key={game.gameId}
-                          game={game}
-                        />
-                      )
-                    })}
-                  </View>
-                </ScrollView>
-              </View>
-            ) : null}
-          </TabsContent>
-        </Tabs>
+      <View style={styles.container}>
+        <View style={styles.tabButtons}>
+          <Button onPress={() => setValue('played')}>
+            <Text>Spelade</Text>
+          </Button>
+          <Button onPress={() => setValue('unplayed')}>
+            <Text>Ospelade</Text>
+          </Button>
+        </View>
+        <View style={styles.games}>
+          {value === 'played' ? (
+            <View style={{ flex: 1, flexGrow: 1, gap: 2 }}>
+              {played.length === 0 ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Text style={styles.text}>
+                    Inga spelade matcher
+                  </Text>
+                </View>
+              ) : null}
+              {played.length > 0 ? (
+                <FlatList
+                  data={played}
+                  style={{ flexGrow: 1, gap: 2 }}
+                  keyExtractor={(item) =>
+                    item.gameId.toString()
+                  }
+                  renderItem={({ item }) => (
+                    <Game
+                      gameId={item.gameId}
+                      homeTeam={item.homeTeam.casualName}
+                      awayTeam={item.awayTeam.casualName}
+                      date={item.date}
+                      result={item.result ?? ''}
+                      halftimeResult={
+                        item.halftimeResult ?? ''
+                      }
+                    />
+                  )}
+                />
+              ) : null}
+            </View>
+          ) : null}
+          {value === 'unplayed' ? (
+            <View style={{ flex: 1, flexGrow: 1 }}>
+              {unplayed.length === 0 ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Text style={styles.text}>
+                    Inga ospelade matcher
+                  </Text>
+                </View>
+              ) : null}
+              {unplayed.length > 0 ? (
+                <FlatList
+                  data={unplayed}
+                  keyExtractor={(item) =>
+                    item.gameId.toString()
+                  }
+                  renderItem={({ item }) => (
+                    <Game
+                      gameId={item.gameId}
+                      homeTeam={item.homeTeam.casualName}
+                      awayTeam={item.awayTeam.casualName}
+                      date={item.date}
+                      result={item.result ?? ''}
+                      halftimeResult={
+                        item.halftimeResult ?? ''
+                      }
+                    />
+                  )}
+                />
+              ) : null}
+            </View>
+          ) : null}
+        </View>
       </View>
     )
   }
 }
 
 export default SingleSerie
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 8,
+    backgroundColor: 'black',
+    padding: 4,
+    justifyContent: 'flex-start',
+  },
+  tabButtons: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'space-between',
+    maxHeight: 40,
+  },
+  text: {
+    color: 'white',
+  },
+  gameContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    marginBottom: 4,
+  },
+  gameItems: {
+    flex: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  gameButton: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  gameText: {
+    fontSize: 10,
+    color: 'white',
+  },
+  games: {
+    flex: 5,
+    gap: 8,
+  },
+})

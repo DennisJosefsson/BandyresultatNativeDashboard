@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "bandyresultatNative",
-    "slug": "bandyresultatNative",
+    "name": "BandyresultatDashboard",
+    "slug": "BandyresultatDashboard",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -21,24 +21,36 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
-      }
+      },
+      "package": "com.dennisjosefsson.BandyresultatDashboard"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router", "expo-font",[
-      "expo-build-properties",
-      {
-        "android": {
-          "usesCleartextTraffic": true
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
         }
-        
-      }
-    ]],
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f94fb8ec-219d-41ba-8209-82410d466bd5"
+      }
     }
   }
 }
