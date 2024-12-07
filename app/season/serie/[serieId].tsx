@@ -25,13 +25,13 @@ const Game = (game: GameProps) => {
   return (
     <View style={styles.gameContainer}>
       <View style={styles.gameItems}>
-        <Text style={{ ...styles.gameText, width: 55 }}>
+        <Text style={{ ...styles.gameText, width: 70 }}>
           {game.date}
         </Text>
-        <Text style={{ ...styles.gameText, width: 55 }}>
+        <Text style={{ ...styles.gameText, width: 40 }}>
           {game.homeTeam}
         </Text>
-        <Text style={{ ...styles.gameText, width: 55 }}>
+        <Text style={{ ...styles.gameText, width: 40 }}>
           {game.awayTeam}
         </Text>
         <Text style={{ ...styles.gameText, width: 25 }}>
@@ -132,8 +132,8 @@ const SingleSerie = () => {
                   renderItem={({ item }) => (
                     <Game
                       gameId={item.gameId}
-                      homeTeam={item.homeTeam.casualName}
-                      awayTeam={item.awayTeam.casualName}
+                      homeTeam={item.homeTeam.shortName}
+                      awayTeam={item.awayTeam.shortName}
                       date={item.date}
                       result={item.result ?? ''}
                       halftimeResult={
@@ -169,8 +169,8 @@ const SingleSerie = () => {
                   renderItem={({ item }) => (
                     <Game
                       gameId={item.gameId}
-                      homeTeam={item.homeTeam.casualName}
-                      awayTeam={item.awayTeam.casualName}
+                      homeTeam={item.homeTeam.shortName}
+                      awayTeam={item.awayTeam.shortName}
                       date={item.date}
                       result={item.result ?? ''}
                       halftimeResult={
@@ -218,19 +218,19 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   gameItems: {
-    flex: 4,
+    flex: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
   },
   gameButton: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   gameText: {
-    fontSize: 10,
+    fontSize: 12,
     color: 'white',
   },
   games: {

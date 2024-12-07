@@ -5,7 +5,12 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { useLocalSearchParams, router } from 'expo-router'
-import { View, Text, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+} from 'react-native'
 import {
   Dispatch,
   SetStateAction,
@@ -39,18 +44,12 @@ const Game = () => {
     onError: (error) => onMutationError(error),
     onSuccess: () => onMutationSuccess(),
   })
-  const [homeGoal, setHomeGoal] = useState<number | null>(
-    null
-  )
-  const [awayGoal, setAwayGoal] = useState<number | null>(
-    null
-  )
-  const [halftimeHomeGoal, setHalftimeHomeGoal] = useState<
-    number | null
-  >(null)
-  const [halftimeAwayGoal, setHalftimeAwayGoal] = useState<
-    number | null
-  >(null)
+  const [homeGoal, setHomeGoal] = useState<number>(0)
+  const [awayGoal, setAwayGoal] = useState<number>(0)
+  const [halftimeHomeGoal, setHalftimeHomeGoal] =
+    useState<number>(0)
+  const [halftimeAwayGoal, setHalftimeAwayGoal] =
+    useState<number>(0)
   const [showError, setShowError] = useState<ErrorState>({
     error: false,
   })
@@ -61,23 +60,15 @@ const Game = () => {
     if (game) {
       if (game.homeGoal) {
         setHomeGoal(game.homeGoal)
-      } else {
-        setHomeGoal(0)
       }
       if (game.awayGoal) {
         setAwayGoal(game.awayGoal)
-      } else {
-        setAwayGoal(0)
       }
       if (game.halftimeHomeGoal) {
         setHalftimeHomeGoal(game.halftimeHomeGoal)
-      } else {
-        setHalftimeHomeGoal(0)
       }
       if (game.halftimeAwayGoal) {
         setHalftimeAwayGoal(game.halftimeAwayGoal)
-      } else {
-        setHalftimeAwayGoal(0)
       }
     }
   }, [game])
@@ -267,8 +258,8 @@ const Game = () => {
 }
 
 type GoalComponentProps = {
-  goal: number | null
-  setGoal: Dispatch<SetStateAction<number | null>>
+  goal: number
+  setGoal: Dispatch<SetStateAction<number>>
 }
 
 function GoalComponent({
@@ -276,30 +267,30 @@ function GoalComponent({
   setGoal,
 }: GoalComponentProps) {
   const minus = () => {
-    setGoal((prev) => prev && prev - 1)
+    setGoal((prev) => prev - 1)
   }
 
   const plus = () => {
-    setGoal((prev) => prev && prev + 1)
+    setGoal((prev) => prev + 1)
   }
 
   return (
     <View style={styles.goalComponent}>
-      <Button
+      <Pressable
         onPress={plus}
-        style={{ maxHeight: 10, maxWidth: 10 }}
+        style={styles.goalButton}
       >
-        <Text>+</Text>
-      </Button>
+        <Text style={{ fontWeight: 'bold' }}>+</Text>
+      </Pressable>
       <View>
         <Text style={{ color: 'white' }}>{goal}</Text>
       </View>
-      <Button
+      <Pressable
         onPress={minus}
-        style={{ maxHeight: 10, maxWidth: 10 }}
+        style={styles.goalButton}
       >
-        <Text>-</Text>
-      </Button>
+        <Text style={{ fontWeight: 'bold' }}>-</Text>
+      </Pressable>
     </View>
   )
 }
@@ -327,5 +318,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     gap: 8,
+  },
+  goalButton: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 32,
+    width: 32,
+    backgroundColor: 'white',
+    borderRadius: 5,
   },
 })

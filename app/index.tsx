@@ -1,5 +1,10 @@
 import { Link } from 'expo-router'
-import { View, Text, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+} from 'react-native'
 import { Button } from '@/components/ui/Button'
 
 export default function App() {
