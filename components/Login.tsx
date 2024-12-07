@@ -62,7 +62,7 @@ const Login = () => {
     <View style={styles.container}>
       <View>
         <View style={styles.userInfo}>
-          <View style={{ flex: 1, maxHeight: 30 }}>
+          <View style={{ flex: 2, maxHeight: 40 }}>
             <Text style={styles.text}>
               Användare är{' '}
               {user ? 'inloggad.' : 'ej inloggad.'}{' '}
@@ -80,7 +80,7 @@ const Login = () => {
         </View>
       </View>
       <View
-        style={{ flex: 1, maxHeight: 50, marginTop: 20 }}
+        style={{ flex: 1, maxHeight: 50, marginTop: 150 }}
       >
         <View>
           <Text style={styles.text}>Användarnamn</Text>
@@ -90,6 +90,7 @@ const Login = () => {
             value={userName}
             onChangeText={setUserName}
             autoComplete="username"
+            importantForAutofill={'yes'}
             style={styles.input}
           />
         </View>
@@ -105,16 +106,19 @@ const Login = () => {
             value={password}
             onChangeText={setPassword}
             autoComplete="password"
+            importantForAutofill={'yes'}
             secureTextEntry={true}
             style={styles.input}
           />
         </View>
       </View>
       <View
-        style={{ flex: 1, maxHeight: 40, marginTop: 20 }}
+        style={{ flex: 1, maxHeight: 45, marginTop: 80 }}
       >
         <Button onPress={handleSubmit}>
-          <Text>Inloggning</Text>
+          <Text>
+            {mutation.isPending ? 'Loggar in...' : 'Skicka'}
+          </Text>
         </Button>
       </View>
       <View style={{ flex: 1, marginTop: 20 }}>
